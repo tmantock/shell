@@ -24,6 +24,7 @@ int shell_cd(char **);
 int shell_ls(char **);
 int shell_cat(char **);
 int shell_pwd(char **);
+int shell_touch(char **);
 int shell_help(char **);
 int shell_exit(char **);
 

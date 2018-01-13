@@ -13,6 +13,7 @@ char *builtin_str[] = {
 	"ls",
 	"cat",
 	"pwd",
+	"touch",
 	"help",
 	"exit"
 };
@@ -22,6 +23,7 @@ int (*builtin_func[]) (char **) = {
 	&shell_ls,
 	&shell_cat,
 	&shell_pwd,
+	&shell_touch,
 	&shell_help,
 	&shell_exit
 };
@@ -53,7 +55,8 @@ int shell_ls(char **args) {
 	if (n < 0) {
 		perror("Shell scandir");
 	} else {
-		while (n--) printf("%s\n", list[n]->d_name);
+		while (n--) printf("%s\t", list[n]->d_name);
+		printf("\n");
 	}
 
 	return 1;
@@ -62,11 +65,11 @@ int shell_ls(char **args) {
 int shell_cat(char **args) {
 	int c;
 	int bufsize = SHELL_RL_BUFSIZE, position = 0;
-	char *buffer = malloc(bufsize * sizeof(char *));
+	char *buffer = malloc(bufsize * sizeof(char));
 	FILE *f;
 
 	if (args[1] == NULL) {
-		fprintf(stderr, "Shell: cat error");
+		fprintf(stderr, "Shell: cat error\n");
 	} else {
 		f = fopen(args[1], "r");
 		if (f) {
@@ -96,7 +99,7 @@ int shell_cat(char **args) {
 
 int shell_pwd(char **args) {
 	int bufsize = SHELL_RL_BUFSIZE;
-	char *buffer = malloc(bufsize * sizeof(char *));
+	char *buffer = malloc(bufsize * sizeof(char));
 
 	if (getcwd(buffer, (size_t) bufsize) != NULL) {
 		printf("%s\n", buffer);
@@ -105,6 +108,24 @@ int shell_pwd(char **args) {
 	}
 
 	free(buffer);
+
+	return 1;
+}
+
+int shell_touch(char **args) {
+	FILE *f;
+	if (args[1] != NULL) {
+		f = fopen(args[1], "w");
+
+		if (f == NULL) {
+			fprintf(stderr, "Shell: touch unable to create a file.\n");
+			return -1;
+		}
+
+		fclose(f);
+	} else {
+		printf("Shell: touch command expects one argument to be the name of the file.\n");
+	}
 
 	return 1;
 }
@@ -149,7 +170,7 @@ char *shell_read_line(void) {
 	int c;
 
 	if (!buffer) {
-		fprintf(stderr, "Shell Allocation Error");
+		fprintf(stderr, "Shell Allocation Error\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -171,7 +192,7 @@ char *shell_read_line(void) {
 			buffer = realloc(buffer, bufsize);
 
 			if (!buffer) {
-				fprintf(stderr, "Shell Allocation Error");
+				fprintf(stderr, "Shell Allocation Error\n");
 				exit(EXIT_FAILURE);
 			}
 		}
@@ -184,7 +205,7 @@ char **shell_split_line(char *line) {
 	char *token;
 
 	if (!tokens) {
-		fprintf(stderr, "Shell Allocation Error");
+		fprintf(stderr, "Shell Allocation Error\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -196,7 +217,7 @@ char **shell_split_line(char *line) {
 			bufsize += SHELL_TOK_BUFSIZE;
 			tokens = realloc(tokens, bufsize * sizeof(char*));
 			if (!tokens) {
-				fprintf(stderr, "Shell Allocation Error");
+				fprintf(stderr, "Shell Allocation Error\n");
 				exit(EXIT_FAILURE);
 			}
 		}
