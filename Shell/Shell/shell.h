@@ -16,15 +16,18 @@
 #include <string.h>
 #include <dirent.h>
 
+#include "lexer.h"
+
 #define SHELL_RL_BUFSIZE 1024
 #define SHELL_TOK_BUFSIZE 64
-#define SHELL_TOK_DELIM " \t\r\n\a"
+#define SHELL_TOK_DELIM " \t\r\n\a\""
 
 int shell_cd(char **);
 int shell_ls(char **);
 int shell_cat(char **);
 int shell_pwd(char **);
 int shell_touch(char **);
+int shell_echo(char **);
 int shell_help(char **);
 int shell_exit(char **);
 

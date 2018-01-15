@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D78F5ED820089AAE00F1A10C /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = D78F5ED720089AAE00F1A10C /* main.c */; };
 		D78F5EE120089AD900F1A10C /* shell.c in Sources */ = {isa = PBXBuildFile; fileRef = D78F5EE020089AD900F1A10C /* shell.c */; };
+		D7FD0175200D37DE0066B6F8 /* lexer.c in Sources */ = {isa = PBXBuildFile; fileRef = D7FD0174200D37DE0066B6F8 /* lexer.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +29,8 @@
 		D78F5ED720089AAE00F1A10C /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		D78F5EDF20089AD900F1A10C /* shell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shell.h; sourceTree = "<group>"; };
 		D78F5EE020089AD900F1A10C /* shell.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = shell.c; sourceTree = "<group>"; };
+		D7FD0173200D37DE0066B6F8 /* lexer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lexer.h; sourceTree = "<group>"; };
+		D7FD0174200D37DE0066B6F8 /* lexer.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lexer.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,7 @@
 		D78F5ED620089AAE00F1A10C /* Shell */ = {
 			isa = PBXGroup;
 			children = (
+				D7FD0172200D37750066B6F8 /* Lexer */,
 				D78F5EDE20089ABC00F1A10C /* Shell */,
 				D78F5ED720089AAE00F1A10C /* main.c */,
 			);
@@ -73,6 +77,15 @@
 				D78F5EE020089AD900F1A10C /* shell.c */,
 			);
 			path = Shell;
+			sourceTree = "<group>";
+		};
+		D7FD0172200D37750066B6F8 /* Lexer */ = {
+			isa = PBXGroup;
+			children = (
+				D7FD0173200D37DE0066B6F8 /* lexer.h */,
+				D7FD0174200D37DE0066B6F8 /* lexer.c */,
+			);
+			path = Lexer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -132,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7FD0175200D37DE0066B6F8 /* lexer.c in Sources */,
 				D78F5EE120089AD900F1A10C /* shell.c in Sources */,
 				D78F5ED820089AAE00F1A10C /* main.c in Sources */,
 			);

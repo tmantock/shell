@@ -14,6 +14,7 @@ char *builtin_str[] = {
 	"cat",
 	"pwd",
 	"touch",
+	"echo",
 	"help",
 	"exit"
 };
@@ -24,6 +25,7 @@ int (*builtin_func[]) (char **) = {
 	&shell_cat,
 	&shell_pwd,
 	&shell_touch,
+	&shell_echo,
 	&shell_help,
 	&shell_exit
 };
@@ -130,8 +132,20 @@ int shell_touch(char **args) {
 	return 1;
 }
 
+int shell_echo(char **args) {
+
+	if (args[1] == NULL) {
+		printf("Shell: echo command expects one argument to be a string.\n");
+	} else {
+		printf("%s\n", args[1]);
+	}
+
+	return 1;
+}
+
 int shell_help(char **args) {
 	int i;
+
 	printf("Type program names and arguments, and hit enter.\n");
 	printf("The following are built in:\n");
 
@@ -200,32 +214,7 @@ char *shell_read_line(void) {
 }
 
 char **shell_split_line(char *line) {
-	int bufsize = SHELL_TOK_BUFSIZE, position = 0;
-	char **tokens = malloc(bufsize * sizeof(char*));
-	char *token;
-
-	if (!tokens) {
-		fprintf(stderr, "Shell Allocation Error\n");
-		exit(EXIT_FAILURE);
-	}
-
-	token = strtok(line, SHELL_TOK_DELIM);
-	while (token != NULL) {
-		tokens[position++] = token;
-
-		if (position >= bufsize) {
-			bufsize += SHELL_TOK_BUFSIZE;
-			tokens = realloc(tokens, bufsize * sizeof(char*));
-			if (!tokens) {
-				fprintf(stderr, "Shell Allocation Error\n");
-				exit(EXIT_FAILURE);
-			}
-		}
-
-		token = strtok(NULL, SHELL_TOK_DELIM);
-	}
-
-	tokens[position] = NULL;
+	char **tokens = parse_input(line);
 
 	return tokens;
 }
