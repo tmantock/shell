@@ -100,8 +100,6 @@ char **parse_input(char *input) {
 			// Build structs for tokens or keep it simple?
 		}
 
-		printf("%s\n", tokens[token_position]);
-
 		input_position++;
 		token_position++;
 
