@@ -30,6 +30,17 @@ int (*builtin_func[]) (char **) = {
 	&shell_exit
 };
 
+int arglen(char **args) {
+	int length = 0, i = 0;
+
+	while(args[i] != NULL) {
+		i++;
+		length++;
+	}
+
+	return length;
+}
+
 int shell_num_builtins() {
 	return sizeof(builtin_str) / sizeof(char *);
 }
@@ -47,17 +58,32 @@ int shell_cd(char **args) {
 }
 
 int shell_ls(char **args) {
+	int size = arglen(args);
 	struct dirent **list;
+
+	char *directory = ".";
+	char delimeter = '\t';
 	int n = 0;
+
+	for (int i = 1; i < size; i++) {
+		if (strncmp(args[i], "-l", 2) > 0 || strncmp(args[i], "-l", 2) == 0) {
+			delimeter = '\n';
+		}
+
+		if (!is_flag_character(args[i][0])) {
+			directory = args[i];
+		}
+	}
+
 	if (args[1] == NULL)
-		n = scandir(".", &list, 0, alphasort);
+		n = scandir(directory, &list, 0, alphasort);
 	else
-		n = scandir(args[1], &list, 0, alphasort);
+		n = scandir(directory, &list, 0, alphasort);
 
 	if (n < 0) {
 		perror("Shell scandir");
 	} else {
-		while (n--) printf("%s\t", list[n]->d_name);
+		while (n--) printf("%s%c", list[n]->d_name, delimeter);
 		printf("\n");
 	}
 

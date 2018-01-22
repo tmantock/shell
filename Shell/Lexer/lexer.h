@@ -20,6 +20,7 @@ void skip_whitespace(char *, int *);
 void skip_characters(char *, int *);
 int is_letter(char);
 int is_number(char);
+int is_flag_character(char);
 char *copy_substring(char *, int, int);
 char *parse_quoted_string(char *, int*);
 char **parse_input(char *);

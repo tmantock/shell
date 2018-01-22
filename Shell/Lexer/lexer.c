@@ -28,6 +28,10 @@ int is_number(char c) {
 	return ('0' <= c && '9' >= c);
 }
 
+int is_flag_character(char c) {
+	return c == '-';
+}
+
 char *copy_substring(char *input, int start, int end) {
 	int i, x = 0;
 	char *substr = malloc((end - start + 1) * sizeof(char));
@@ -75,6 +79,7 @@ char *parse_quoted_string(char *input, int *start) {
 }
 
 char **parse_input(char *input) {
+	int input_length = (int) strlen(input);
 	int input_position = 0, token_position = 0;
 	int token_size = SHELL_TOK_BUFSIZE;
 	char **tokens = malloc(token_size * sizeof(char *));
@@ -84,10 +89,10 @@ char **parse_input(char *input) {
 		exit(EXIT_FAILURE);
 	}
 
-	while (input[input_position] != '\0') {
+	while (input[input_position] != '\0' && input_position < input_length) {
 		skip_whitespace(input, &input_position);
 
-		if (is_letter(input[input_position]) || is_number(input[input_position])) {
+		if (is_letter(input[input_position]) || is_number(input[input_position]) || is_flag_character(input[input_position])) {
 			int forward_position = input_position;
 			skip_characters(input, &forward_position);
 			char *substr = copy_substring(input, input_position, forward_position);
@@ -96,8 +101,6 @@ char **parse_input(char *input) {
 			input_position = forward_position;
 		} else if (input[input_position] == '\'' || input[input_position] == '"') {
 			tokens[token_position] = parse_quoted_string(input, &input_position);
-		} else if (input[input_position] == '-') {
-			// Build structs for tokens or keep it simple?
 		}
 
 		input_position++;

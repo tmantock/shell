@@ -37,5 +37,7 @@ char **shell_split_line(char *);
 int shell_launch(char **);
 int shell_execute(char **);
 
+int arglen(char **);
+
 #endif /* shell_h */
 
