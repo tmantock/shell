@@ -38,6 +38,7 @@ int shell_launch(char **);
 int shell_execute(char **);
 
 int arglen(char **);
+int compare_flags(char*, char*);
 
 #endif /* shell_h */
 

@@ -41,6 +41,10 @@ int arglen(char **args) {
 	return length;
 }
 
+int compare_flags(char *a, char *b) {
+	return strstr(a, b);
+}
+
 int shell_num_builtins() {
 	return sizeof(builtin_str) / sizeof(char *);
 }
@@ -63,14 +67,20 @@ int shell_ls(char **args) {
 
 	char *directory = ".";
 	char delimeter = '\t';
+
 	int n = 0;
+	int all = 0;
 
 	for (int i = 1; i < size; i++) {
-		if (strncmp(args[i], "-l", 2) > 0 || strncmp(args[i], "-l", 2) == 0) {
-			delimeter = '\n';
-		}
+		if (is_flag_character(args[i][0])) {
+			if (compare_flags(args[i], "l")) {
+				delimeter = '\n';
+			}
 
-		if (!is_flag_character(args[i][0])) {
+			if (compare_flags(args[i], "a")) {
+				all = 1;
+			}
+		} else {
 			directory = args[i];
 		}
 	}
@@ -83,7 +93,11 @@ int shell_ls(char **args) {
 	if (n < 0) {
 		perror("Shell scandir");
 	} else {
-		while (n--) printf("%s%c", list[n]->d_name, delimeter);
+		while (n--) {
+			if (list[n]->d_name[0] == '.' && !all) continue;
+
+			printf("%s%c", list[n]->d_name, delimeter);
+		}
 		printf("\n");
 	}
 
