@@ -203,14 +203,20 @@ int shell_exit(char **args) {
 
 void shell_loop(void) {
 	char *line;
-	char **args;
-	int status;
+	Queue *args;
+	int status = 0;
 
 	do {
 		printf("$ ");
 		line = shell_read_line();
 		args = shell_split_line(line);
-		status = shell_execute(args);
+
+		while (!queueIsEmpty(args)) {
+			InputNode *in = queueTop(args);
+			queuePop(args);
+			status = shell_execute(in->line);
+			freeInputNode(in);
+		}
 
 		free(line);
 		free(args);
@@ -253,8 +259,8 @@ char *shell_read_line(void) {
 	}
 }
 
-char **shell_split_line(char *line) {
-	char **tokens = parse_input(line);
+Queue *shell_split_line(char *line) {
+	Queue *tokens = parse_input(line);
 
 	return tokens;
 }
