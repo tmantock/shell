@@ -111,7 +111,8 @@ Queue *parse_input(char *input) {
 		}
 
 		while (!is_operator(input, input_position) && input[input_position] != '\0') {
-			if (is_letter(input[input_position]) || is_number(input[input_position]) || is_operator_character(input[input_position]) || is_flag_character(input[input_position])) {
+			skip_whitespace(input, &input_position);
+			if (input[input_position] != '"' && input[input_position] != '\'') {
 				int forward_position = input_position;
 				skip_characters(input, &forward_position);
 				char *substr = copy_substring(input, input_position, forward_position);
@@ -138,13 +139,13 @@ Queue *parse_input(char *input) {
 		tokens[token_position] = NULL;
 
 		if (is_operator(input, input_position)) {
-			operator = copy_substring(input, input_position, input_position + 1);
+			operator = copy_substring(input, input_position, input_position + 2);
 			input_position += 2;
 		} else {
 			input_position++;
 		}
 
-		queueAppend(que, tokens, operator, token_position);
+		queueAppend(que, tokens, operator, token_position - 1);
 	}
 
 	return que;

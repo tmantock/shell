@@ -19,7 +19,7 @@ char *builtin_str[] = {
 	"exit"
 };
 
-int (*builtin_func[]) (char **) = {
+int (*builtin_func[]) (char **, int) = {
 	&shell_cd,
 	&shell_ls,
 	&shell_cat,
@@ -49,7 +49,7 @@ int shell_num_builtins() {
 	return sizeof(builtin_str) / sizeof(char *);
 }
 
-int shell_cd(char **args) {
+int shell_cd(char **args, int size) {
 	if (args[1] == NULL) {
 		fprintf(stderr, "Shell: Expected argument to \"cd\"\n");
 	} else {
@@ -61,8 +61,7 @@ int shell_cd(char **args) {
 	return 1;
 }
 
-int shell_ls(char **args) {
-	int size = arglen(args);
+int shell_ls(char **args, int size) {
 	struct dirent **list;
 
 	char *directory = ".";
@@ -104,7 +103,7 @@ int shell_ls(char **args) {
 	return 1;
 }
 
-int shell_cat(char **args) {
+int shell_cat(char **args, int size) {
 	int c;
 	int bufsize = SHELL_RL_BUFSIZE, position = 0;
 	char *buffer = malloc(bufsize * sizeof(char));
@@ -139,7 +138,7 @@ int shell_cat(char **args) {
 	return 1;
 }
 
-int shell_pwd(char **args) {
+int shell_pwd(char **args, int size) {
 	int bufsize = SHELL_RL_BUFSIZE;
 	char *buffer = malloc(bufsize * sizeof(char));
 
@@ -154,7 +153,7 @@ int shell_pwd(char **args) {
 	return 1;
 }
 
-int shell_touch(char **args) {
+int shell_touch(char **args, int size) {
 	FILE *f;
 	if (args[1] != NULL) {
 		f = fopen(args[1], "w");
@@ -172,7 +171,7 @@ int shell_touch(char **args) {
 	return 1;
 }
 
-int shell_echo(char **args) {
+int shell_echo(char **args, int size) {
 
 	if (args[1] == NULL) {
 		printf("Shell: echo command expects one argument to be a string.\n");
@@ -183,7 +182,7 @@ int shell_echo(char **args) {
 	return 1;
 }
 
-int shell_help(char **args) {
+int shell_help(char **args, int size) {
 	int i;
 
 	printf("Type program names and arguments, and hit enter.\n");
@@ -197,7 +196,7 @@ int shell_help(char **args) {
 	return 1;
 }
 
-int shell_exit(char **args) {
+int shell_exit(char **args, int size) {
 	return 0;
 }
 
@@ -214,7 +213,12 @@ void shell_loop(void) {
 		while (!queueIsEmpty(args)) {
 			InputNode *in = queueTop(args);
 			queuePop(args);
-			status = shell_execute(in->line);
+			status = shell_execute(in->line, in->size);
+
+			if (in->operator == "&&") {
+
+			}
+
 			freeInputNode(in);
 		}
 
@@ -286,7 +290,7 @@ int shell_launch(char **args) {
 	return 1;
 }
 
-int shell_execute(char **args) {
+int shell_execute(char **args, int size) {
 	int i;
 
 	if (args[0] == NULL) {
@@ -295,7 +299,7 @@ int shell_execute(char **args) {
 
 	for (i = 0; i < shell_num_builtins(); i++) {
 		if (strcmp(args[0], builtin_str[i]) == 0) {
-			return (*builtin_func[i])(args);
+			return (*builtin_func[i])(args, size);
 		}
 	}
 

@@ -22,20 +22,20 @@
 #define SHELL_TOK_BUFSIZE 64
 #define SHELL_TOK_DELIM " \t\r\n\a\""
 
-int shell_cd(char **);
-int shell_ls(char **);
-int shell_cat(char **);
-int shell_pwd(char **);
-int shell_touch(char **);
-int shell_echo(char **);
-int shell_help(char **);
-int shell_exit(char **);
+int shell_cd(char **, int);
+int shell_ls(char **, int);
+int shell_cat(char **, int);
+int shell_pwd(char **, int);
+int shell_touch(char **, int);
+int shell_echo(char **, int);
+int shell_help(char **, int);
+int shell_exit(char **, int);
 
 void shell_loop(void);
 char *shell_read_line(void);
 Queue *shell_split_line(char *);
 int shell_launch(char **);
-int shell_execute(char **);
+int shell_execute(char **, int);
 
 int arglen(char **);
 int compare_flags(char*, char*);
