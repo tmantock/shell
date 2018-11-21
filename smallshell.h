@@ -49,6 +49,6 @@ void check_background_process(Processes *);
 Processes *create_processes();
 void add_process(Processes *, pid_t);
 void remove_process(Processes *, pid_t);
-void destroy_procces(Processes *);
+void destroy_proccess(Processes *);
 
 #endif /* shell_h */

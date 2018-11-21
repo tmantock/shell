@@ -89,7 +89,7 @@ void shell_loop(void)
         args = NULL;
     } while (status);
 
-    destroy_procces(proc);
+    destroy_proccess(proc);
 }
 
 // Function reads user input from stdin
@@ -110,9 +110,7 @@ char *shell_read_line(void)
     {
         c = getchar();
 
-        buffer[position] = c;
-
-        position++;
+        buffer[position++] = c;
 
         if (position >= bufsize)
         {
@@ -150,7 +148,7 @@ int shell_launch(List *args, Processes *proc)
     // Signal handlers
     struct sigaction sigint_action = {0};
     struct sigaction sigstop_action = {0};
-    // Set the signal handlers (from Lecture)
+    // Set the signal handlers
     sigint_action.sa_handler = sigint_handler;
     sigstop_action.sa_handler = sigstp_handler;
 
@@ -229,7 +227,7 @@ int shell_launch(List *args, Processes *proc)
             dup2(input, 0);
         }
         // Check if the process is to run in the background and if the output needs to point to null
-        if (pipes[0] == NULL && background)
+        if (pipes[1] == NULL && background)
         {
             int output = open("/dev/null", O_RDONLY, 06444);
 
@@ -251,7 +249,7 @@ int shell_launch(List *args, Processes *proc)
     }
     else if (pid < 0)
     { // Error in fork process
-        perror("Shell");
+        perror("Shell: Error starting child process through fork");
     }
     else
     { // Parent process
@@ -409,7 +407,7 @@ void remove_process(Processes *p, pid_t pid)
 }
 
 // Function frees a Processes list
-void destroy_procces(Processes *p)
+void destroy_proccess(Processes *p)
 {
     free(p->process);
     free(p);

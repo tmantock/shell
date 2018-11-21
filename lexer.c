@@ -191,7 +191,7 @@ List *createList()
     return lst;
 }
 
-// Function appends a node tot the list
+// Function appends a node to the list
 void listAppend(List *l, char **input, char operator, int size)
 {
     if (size == 0)
@@ -245,7 +245,10 @@ void freeInputNode(InputNode *in)
         return;
 
     if (in->line)
+    {
         free(in->line);
+    }
+
     free(in);
 }
 
