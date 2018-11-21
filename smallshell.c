@@ -320,24 +320,14 @@ void check_background_process(Processes *proc)
 // the foreground program
 void sigint_handler(int sn)
 {
-    char str[60];
-    int count = 0;
+    int len = 60;
+    char str[len];
 
-    memset(str, '\0', 60 * sizeof(char));
+    memset(str, '\0', len * sizeof(char));
 
     sprintf(str, "Terminated by signal %d\n", sn);
 
-    for (int i = 0; i < 60; i++)
-    {
-        if (str[i] != '\0')
-        {
-            count++;
-        }
-        else
-        {
-            break;
-        }
-    }
+    str[len - 1] = '\0'; // Make sure the last character is a null terminator
 
     write(STDOUT_FILENO, str, count);
     fflush(stdout);
